@@ -1,0 +1,12 @@
+#shift+f 执行kether
+Shortcuts:
+  Sneaking-Offhand: ""
+#数据库的基本配置
+#不开启数据库 使用本地 sqlite 存储数据
+database:
+  enable: false
+  host: localhost
+  port: 3306
+  user: root
+  password: 123456789
+  database: minecraft

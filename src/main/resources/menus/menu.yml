@@ -1,0 +1,63 @@
+title: "          &4&l可交互的测试商店"
+events:
+  open:
+    set-click-cancel type boolean false
+  #当点击相应槽位时，执行该kether脚本
+  click:
+    0:
+      tell 0
+
+#菜单布局
+layout:
+  - "####b####"
+  - "#@@@@@@@#"
+  - "#@@@@@@@#"
+  - "#@@@@@@@#"
+  - "#@@@@@@@#"
+  - "####a####"
+icons:
+  "#":
+    display:
+      name: " "
+      material: "black_stained_glass_pane"
+  "a":
+    update: 20
+    display:
+      name: "&e点击回收"
+      material: "paper"
+      lore:
+        - ""
+        - "&7当前金币余额: &e%vault_eco_balance%"
+    actions:
+      left: |-
+        set slots to get-slots @
+        set amount to type int 0
+        for i in &slots then {
+          set item to get-item &i
+          if check &item != null then {
+            if check inline "{{&item[type]}}" == "DIAMOND" then {
+              set itemAmount to type int get-item-amount &item
+              set amount to math + [ &itemAmount &amount ]
+              clear-item &i
+            } else {
+              give-item &item
+              clear-item &i
+            }
+          }
+        }
+        set money to math * [ &amount 100 ]
+        command inline "money give {{papi %player_name%}} {{&money}}" as op
+  "b":
+    display:
+      material: "dark_oak_hanging_sign"
+      name: "&7回收价格表"
+      lore:
+        - ""
+        - "&8| &7- 钻石: &e100$"
+  "c":
+    display:
+      name: "&e打开菜单交互"
+      material: "lever"
+    actions:
+      left:
+        set-click-cancel type boolean false

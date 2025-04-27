@@ -1,0 +1,3 @@
+prefix: "&x&4&8&6&f&f&b[ RuMenu ]"
+fileReload: "{prefix} 配置文件 {file} 发生变动以重新加载!"
+delete: "{prefix} 配置文件 {file} 被删除以重新加载!"
