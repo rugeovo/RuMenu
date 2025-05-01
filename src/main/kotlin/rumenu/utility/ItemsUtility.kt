@@ -3,9 +3,12 @@ package rumenu.utility
 import com.google.gson.Gson
 import org.bukkit.Color
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import rumenu.utility.ExteriorItem.getIntroducedItem
+import taboolib.common.platform.function.info
 import taboolib.platform.compat.replacePlaceholder
 import taboolib.platform.util.*
 import java.util.*
@@ -14,18 +17,22 @@ import java.util.*
 object ItemsUtility {
 
     //菜单物品的创建函数
-    fun createMenuItem(player: Player,item: ItemStack,map: Map<String, Any?>): ItemStack {
+    fun createMenuItem(item: ItemStack, map: Map<String, Any?>): ItemStack {
         return buildItem(item){
-
-            applyMapToBuilder(this,parseStringToMap(map,player))
+            applyMapToBuilder(this,map)
             colored()
-            
         }
     }
+
     //菜单物品的创建函数
     fun createMenuItem(player: Player,material: Material,map: Map<String, Any?>): ItemStack {
+        val newmap = parseStringToMap(map,player)
+        val str = newmap.get("itembase")
+        if (str != null) {
+            return createMenuItem(getIntroducedItem(str.toString()), newmap)
+        }
         return buildItem(material){
-            applyMapToBuilder(this,parseStringToMap(map,player))
+            applyMapToBuilder(this,newmap)
             colored()
         }
     }
@@ -35,9 +42,10 @@ object ItemsUtility {
     private fun applyMapToBuilder(builder: ItemBuilder, map: Map<String, Any?>) {
         for ((key, value) in map) {
             when (key) {
-                "material" -> builder.material = Material.valueOf((value as String ).uppercase(Locale.getDefault()))
+                "material" -> builder.material = Material.valueOf((value as String).uppercase(Locale.getDefault()))
                 "name" -> builder.name = value as String
                 "lore" -> setLore(builder, value as List<String>)
+                "amount" -> builder.amount = value.toString().toInt()
                 "customModelData" -> builder.customModelData = value.toString().toInt()
                 "unbreakable" -> builder.isUnbreakable = value as? Boolean ?: false
                 "enchants" -> setEnchants(builder, value as Map<String, Any>)
@@ -56,9 +64,9 @@ object ItemsUtility {
     //附魔设置
     private fun setEnchants(builder: ItemBuilder,enchantments: Map<String, Any>){
         for ((enchantName, level) in enchantments) {
-            val enchantment = Enchantment.getByName(enchantName)
+            val enchantment = Enchantment.getByKey(NamespacedKey.minecraft(enchantName))
             if (enchantment != null) {
-                builder.enchants[enchantment] = level as Int
+                builder.enchants[enchantment] = level.toString().toInt()
             }
         }
     }

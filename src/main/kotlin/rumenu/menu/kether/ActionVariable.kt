@@ -8,7 +8,7 @@ import taboolib.module.kether.player
 
 object ActionVariable {
 
-    @KetherParser(["rm-get"], shared = false)
+    @KetherParser(["rm-get"], shared = true)
     fun get() = combinationParser {
         it.group(type<String>()).apply(it) { key ->
             now {
@@ -17,16 +17,16 @@ object ActionVariable {
         }
     }
 
-    @KetherParser(["rm-set"], shared = false)
+    @KetherParser(["rm-set"], shared = true)
     fun set() = combinationParser {
-        it.group(type<String>(),type<String>()).apply(it) { key,value ->
+        it.group(type<String>(),type<Any>()).apply(it) { key,value ->
             now {
-                 variableTable.set(player().uniqueId.toString(),key,value)
+                 variableTable.set(player().uniqueId.toString(),key,value.toString())
             }
         }
     }
 
-    @KetherParser(["rm-add"], shared = false)
+    @KetherParser(["rm-add"], shared = true)
     fun add() = combinationParser {
         it.group(type<String>(),type<String>()).apply(it) { key,value ->
             now {

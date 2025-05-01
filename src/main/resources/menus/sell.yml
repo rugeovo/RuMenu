@@ -1,0 +1,100 @@
+title: "            &8&l服务器系统商店"
+layout:
+  - "#########"
+  - "#       #"
+  - "#bcdagfe#"
+  - "#       #"
+  - "########h"
+icons:
+  "#":
+    display:
+      name: " "
+      material: "black_stained_glass_pane"
+  "a":
+    update: 20
+    display:
+      name: ""
+      material: "%rm_sellmate%"
+      amount: "%rm_sellamount%"
+      lore:
+        - ""
+        - "&7当前数量: &f%rm_sellamount%"
+        - ""
+        - "&7单价: &e%rm_sell%"
+        - "&7累计支付: &f%math_0_{rm_sellamount}*{rm_sell}%"
+        - ""
+        - "&7你已拥有: &a%vault_eco_balance%"
+        - ""
+        - "&c左键点击支付"
+    actions:
+      left:
+        set needmoney to papi %math_0_{rm_sellamount}*{rm_sell}%
+        if check papi %vault_eco_balance% >= &needmoney then {
+          command inline "give {{papi %rm_sellmate%}} {{papi %rm_sellamount%}}" as op
+          command inline "money take {{papi %player_name%}} {{&needmoney}}"
+          tell inline color "&a成功购买 &e{{papi %rm_sellamount%}} &a个 {{papi %rm_sellmate%}}"
+        } else {
+          tell color "&c你的金币不足无法购买"
+        }
+  "b":
+    display:
+      name: "&a+1"
+      material: "lime_stained_glass_pane"
+    actions:
+      left:
+        rm-set sellamount math + [ type int rm-get sellamount 1 ]
+  "c":
+    display:
+      name: "&a+10"
+      material: "lime_stained_glass_pane"
+    actions:
+      left:
+        rm-set sellamount math + [ type int rm-get sellamount 10 ]
+  "d":
+    display:
+      name: "&a+30"
+      material: "lime_stained_glass_pane"
+    actions:
+      left:
+        rm-set sellamount math + [ type int rm-get sellamount 30 ]
+  "e":
+    display:
+      name: "&c-1"
+      material: "red_stained_glass_pane"
+    actions:
+      left:
+        set amount to math - [ type int rm-get sellamount 1 ]
+        if check &amount <= 0 then {
+          set amount to type int 1
+        }
+        rm-set sellamount &amount
+  "f":
+    display:
+      name: "&c-10"
+      material: "red_stained_glass_pane"
+    actions:
+      left:
+        set amount to math - [ type int rm-get sellamount 10 ]
+        if check &amount <= 0 then {
+        set amount to type int 1
+        }
+        rm-set sellamount &amount
+  "g":
+    display:
+      name: "&c-30"
+      material: "red_stained_glass_pane"
+    actions:
+      left:
+        set amount to math - [ type int rm-get sellamount 30 ]
+        if check &amount <= 0 then {
+        set amount to type int 1
+        }
+        rm-set sellamount &amount
+  "h":
+    update: 20
+    display:
+      name: "&c点击返回"
+      material: "barrier"
+    actions:
+      left:
+        open-menu menu

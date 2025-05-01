@@ -4,6 +4,7 @@ import org.bukkit.Material
 import org.bukkit.inventory.ItemStack
 import rumenu.cahe.OpenMenuCache.openCacheMenu
 import rumenu.menu.MenuUtiliy.findIndicesOfString
+import taboolib.common.platform.function.info
 import taboolib.module.kether.KetherParser
 import taboolib.module.kether.combinationParser
 import taboolib.module.kether.player
@@ -55,7 +56,9 @@ object EditMenu {
         it.group(type<String>()).apply(it) { char ->
             now {
                 val uuid = player().uniqueId
-                return@now openCacheMenu[uuid]?.layout?.let { it1 -> findIndicesOfString(char, it1) }
+                return@now openCacheMenu[uuid]?.layout?.let { it1 ->
+                    findIndicesOfString(char, it1)
+                }
             }
         }
     }

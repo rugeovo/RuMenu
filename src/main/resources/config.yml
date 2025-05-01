@@ -1,6 +1,7 @@
 #shift+f 执行kether
 Shortcuts:
-  Sneaking-Offhand: ""
+  Sneaking-Offhand:
+    open-menu menu
 #数据库的基本配置
 #不开启数据库 使用本地 sqlite 存储数据
 database:

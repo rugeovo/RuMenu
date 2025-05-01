@@ -1,11 +1,14 @@
 package rumenu.profile
 
 import rumenu.cahe.OpenMenuCache
+import rumenu.cahe.OpenMenuCache.openCacheMenu
+import rumenu.cahe.OpenMenuCache.openMenu
 import rumenu.profile.FileConfig.consoleMessage
 import rumenu.utility.Files.unwatch
 import rumenu.utility.Files.watch
 import rumenu.utility.deepRead
 import taboolib.common.platform.function.getDataFolder
+import taboolib.common.platform.function.info
 import taboolib.common.platform.function.releaseResourceFile
 import taboolib.module.configuration.Configuration
 import java.io.File
@@ -27,6 +30,8 @@ object File {
                 mkdirs()
                 // 如果目录不存在，释放默认的 menu.yml 文件
                 menuFiles["menu"] = loadConfiguration(releaseResourceFile("menus/menu.yml"))
+                menuFiles["buy"] = loadConfiguration(releaseResourceFile("menus/buy.yml"))
+                menuFiles["sell"] = loadConfiguration(releaseResourceFile("menus/sell.yml"))
             }
         }
 

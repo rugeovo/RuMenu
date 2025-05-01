@@ -3,6 +3,7 @@ package rumenu.cahe
 import org.bukkit.entity.Player
 import rumenu.menu.Menu
 import rumenu.profile.File.menuFiles
+import taboolib.common.platform.function.info
 import java.util.*
 
 object OpenMenuCache {
@@ -18,6 +19,7 @@ object OpenMenuCache {
 
         if (menu != null) {
             menu.openInventory()
+            openCacheMenu[uuid] = menu
             return
         }
 

@@ -1,0 +1,62 @@
+title: "            &8&l服务器系统商店"
+events:
+  open:
+    set-click-cancel type boolean false
+  close:
+    set slots to get-slots @
+    for i in &slots then {
+      set item to get-item &i
+      if check &item != null then {
+        give-item &item
+        clear-item &i
+      }
+    }
+#菜单布局
+layout:
+  - "#########"
+  - "#@@@@@@@#"
+  - "#@@@@@@@#"
+  - "#@@@@@@@#"
+  - "#@@@@@@@#"
+  - "####a###b"
+icons:
+  "#":
+    display:
+      name: " "
+      material: "black_stained_glass_pane"
+  "a":
+    update: 20
+    display:
+      name: "&e点击回收"
+      material: "paper"
+      lore:
+        - ""
+        - "&7当前金币余额: &e%vault_eco_balance%"
+    actions:
+      left: |-
+        set slots to get-slots @
+        set amount to type int 0
+        for i in &slots then {
+          set item to get-item &i
+          if check &item != null then {
+            if check inline "{{&item[type]}}" == rm-get buymate then {
+              set itemAmount to type int get-item-amount &item
+              set amount to math + [ &itemAmount &amount ]
+            } else {
+              give-item &item
+            }
+            clear-item &i
+          }
+        }
+        set money to math * [ &amount type int rm-get buy ]
+        if check &money != 0 then {
+          command inline "money give {{papi %player_name%}} {{&money}}" as op
+        }
+  "b":
+    update: 20
+    display:
+      name: "&c点击返回"
+      material: "barrier"
+    actions:
+      left:
+        open-menu menu

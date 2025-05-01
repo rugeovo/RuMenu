@@ -23,7 +23,7 @@ object ActionMenu {
 
     @KetherParser(["close-menu"], shared = false)
     fun closeMenu() = combinationParser {
-        it.group(type<String>()).apply(it) { menu ->
+        it.group(type<String>()).apply(it) {
             now {
                 val uuid = player().uniqueId
                 openCacheMenu[uuid]?.closeInventory()

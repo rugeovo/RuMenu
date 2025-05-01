@@ -17,7 +17,8 @@ taboolib {
             BukkitUI,
             Kether,
             Database,
-            PtcObject
+            PtcObject,
+            JavaScript
         )
     }
     version {

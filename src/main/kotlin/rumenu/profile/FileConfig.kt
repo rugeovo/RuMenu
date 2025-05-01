@@ -36,4 +36,5 @@ object FileConfig {
         replace("{file}", fileName).
         colored())
     }
+
 }
