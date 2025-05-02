@@ -1,4 +1,13 @@
 title: "            &8&l服务器系统商店"
+bind:
+  commands:
+    - "shop"
+  display:
+    name: "&e服务器菜单"
+    material: clock
+    lore:
+      - ""
+      - "&a左键点击打开"
 layout:
   - "#########"
   - "#ab     #"

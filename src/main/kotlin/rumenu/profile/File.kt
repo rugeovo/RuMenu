@@ -1,12 +1,20 @@
 package rumenu.profile
 
+import org.bukkit.Bukkit
+import org.bukkit.command.Command
+import org.bukkit.command.CommandMap
+import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
 import rumenu.cahe.OpenMenuCache
 import rumenu.cahe.OpenMenuCache.openCacheMenu
 import rumenu.cahe.OpenMenuCache.openMenu
+import rumenu.events.BindItemEvent.clearCache
 import rumenu.profile.FileConfig.consoleMessage
 import rumenu.utility.Files.unwatch
 import rumenu.utility.Files.watch
+import rumenu.utility.ItemsUtility.createMenuItem
 import rumenu.utility.deepRead
+import taboolib.common.platform.command.simpleCommand
 import taboolib.common.platform.function.getDataFolder
 import taboolib.common.platform.function.info
 import taboolib.common.platform.function.releaseResourceFile
@@ -50,11 +58,24 @@ object File {
                     menuFiles.remove(name)
                     consoleMessage(name,LangText.delete)
                 }
+                createOpenMenuCmd()
+                clearCache()
+            }
+        }
+        createOpenMenuCmd()
+    }
+
+    fun createOpenMenuCmd(){
+        menuFiles.forEach { (yname,config) ->
+            config.getStringList("bind.commands").forEach{ cmd ->
+                simpleCommand(cmd) { sender, _ ->
+                    val player = Bukkit.getPlayer(sender.name)
+                    player?.let { openMenu(it,yname) }
+                }
             }
         }
     }
 
-    // 提取重复的配置加载逻辑
     private fun loadConfiguration(file: File): Configuration {
         return Configuration.loadFromFile(file)
     }

@@ -27,7 +27,7 @@ object ItemsUtility {
     //菜单物品的创建函数
     fun createMenuItem(player: Player,material: Material,map: Map<String, Any?>): ItemStack {
         val newmap = parseStringToMap(map,player)
-        val str = newmap.get("itembase")
+        val str = newmap["itembase"]
         if (str != null) {
             return createMenuItem(getIntroducedItem(str.toString()), newmap)
         }
