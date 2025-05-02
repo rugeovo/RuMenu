@@ -61,9 +61,12 @@ object MainCommand {
             execute<Player>{ sender, context, _ ->
                 val menufile = menuFiles[context["menu"]]
                 if (menufile != null) {
-                    sender.inventory.addItem(menufile.getConfigurationSection("bind.display")?.let {
-                        createMenuItem(sender,Material.STONE, it.toMap())
-                    })
+                    val display = menufile.getConfigurationSection("bind.display")
+                    if (display != null) {
+                        sender.inventory.addItem(
+                            createMenuItem(sender,Material.STONE, display.toMap())
+                        )
+                    }
                 }
             }
         }

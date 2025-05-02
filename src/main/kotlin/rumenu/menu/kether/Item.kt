@@ -28,6 +28,24 @@ object Item {
         }
     }
 
+    @KetherParser(["get-item-cmd"], shared = false)
+    fun getItemCustomModelData() = combinationParser {
+        it.group(type<ItemStack>()).apply(it) { item ->
+            now {
+                item.itemMeta?.customModelData
+            }
+        }
+    }
+
+    @KetherParser(["set-item-cmd"], shared = false)
+    fun setItemCustomModelData() = combinationParser {
+        it.group(type<ItemStack>(),type<Int>()).apply(it) { item,num ->
+            now {
+                item.itemMeta?.setCustomModelData(num)
+            }
+        }
+    }
+
     @KetherParser(["get-itemstack"], shared = false)
     fun getItemStack() = combinationParser {
         it.group(type<String>()).apply(it) { material ->
