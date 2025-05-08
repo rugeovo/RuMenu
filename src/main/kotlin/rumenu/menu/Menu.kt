@@ -129,6 +129,15 @@ class Menu(val player: Player, val menufile: Configuration) {
                 }
             }
             onClick { event ->
+                KetherShell.eval(
+                    menufile.getString("events.click") ?: "", options = ScriptOptions(
+                        sender = adaptCommandSender(player),
+                        context = {
+                            set("rawSlot",event.rawSlot)
+                            set("slot",event.slot)
+                        }
+                    )
+                )
                 event.isCancelled = clickCancell
             }
             menufile.getConfigurationSection("icons")?.getKeys(false)?.forEach { char ->

@@ -2,7 +2,12 @@ package rumenu.menu.kether
 
 import org.bukkit.Bukkit
 import org.bukkit.Material
+import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.ItemMeta
+import rumenu.cahe.OpenMenuCache.openCacheMenu
+import rumenu.profile.File.menuFiles
+import rumenu.utility.ItemsUtility.createMenuItem
 import taboolib.module.kether.KetherParser
 import taboolib.module.kether.combinationParser
 import taboolib.module.kether.player
@@ -28,29 +33,43 @@ object Item {
         }
     }
 
-    @KetherParser(["get-item-cmd"], shared = false)
-    fun getItemCustomModelData() = combinationParser {
-        it.group(type<ItemStack>()).apply(it) { item ->
+    @KetherParser(["remove-item-amount"], shared = false)
+    fun removeItemAmount() = combinationParser {
+        it.group(type<ItemStack>(),type<Int>()).apply(it) { item,num ->
             now {
-                item.itemMeta?.customModelData
+                item.amount -= num
             }
         }
     }
 
-    @KetherParser(["set-item-cmd"], shared = false)
-    fun setItemCustomModelData() = combinationParser {
+    @KetherParser(["add-item-amount"], shared = false)
+    fun addItemAmount() = combinationParser {
         it.group(type<ItemStack>(),type<Int>()).apply(it) { item,num ->
             now {
-                item.itemMeta?.setCustomModelData(num)
+                item.amount += num
+            }
+        }
+    }
+
+    @KetherParser(["get-item-cmd"], shared = false)
+    fun getItemCustomModelData() = combinationParser {
+        it.group(type<ItemStack>()).apply(it) { item ->
+            now {
+                item.itemMeta?.takeIf { meta -> meta.hasCustomModelData() }?.customModelData ?: "null"
             }
         }
     }
 
     @KetherParser(["get-itemstack"], shared = false)
     fun getItemStack() = combinationParser {
-        it.group(type<String>()).apply(it) { material ->
+        it.group(type<String>()).apply(it) { node ->
             now {
-                buildItem(Material.valueOf(material.uppercase()))
+                val uuid = player().uniqueId
+                val player = Bukkit.getPlayer(uuid) ?: return@now null
+                val menuFile = openCacheMenu[uuid]?.menufile ?: return@now null
+                val display = menuFile.getConfigurationSection(node) ?: return@now null
+                val item = createMenuItem(player, Material.STONE,display.toMap())
+                return@now item
             }
         }
     }
@@ -64,4 +83,50 @@ object Item {
             }
         }
     }
+
+    @KetherParser(["clone-item"], shared = false)
+    fun cloneItem() = combinationParser {
+        it.group(type<ItemStack>()).apply(it) { item ->
+            now {
+                item.clone()
+            }
+        }
+    }
+
+    @KetherParser(["get-item-meta"], shared = false)
+    fun getItemMeta() = combinationParser {
+        it.group(type<ItemStack>()).apply(it) { item ->
+            now {
+                item.itemMeta
+            }
+        }
+    }
+
+    @KetherParser(["set-item-meta"], shared = false)
+    fun setItemMeta() = combinationParser {
+        it.group(type<ItemStack>(), type<ItemMeta>()).apply(it) { item, meta ->
+            now {
+                item.setItemMeta(meta)
+            }
+        }
+    }
+
+    @KetherParser(["set-meta-cmd"], shared = false)
+    fun setItemCustomModelData() = combinationParser {
+        it.group(type<ItemMeta>(),type<Int>()).apply(it) { item,num ->
+            now {
+                item?.setCustomModelData(num)
+            }
+        }
+    }
+
+    @KetherParser(["clone-meta"], shared = false)
+    fun cloneMeta() = combinationParser {
+        it.group(type<ItemMeta>()).apply(it) { meta ->
+            now {
+                meta.clone()
+            }
+        }
+    }
+
 }

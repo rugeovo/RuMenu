@@ -14,6 +14,7 @@ import rumenu.utility.Files.unwatch
 import rumenu.utility.Files.watch
 import rumenu.utility.ItemsUtility.createMenuItem
 import rumenu.utility.deepRead
+import taboolib.common.platform.command.PermissionDefault
 import taboolib.common.platform.command.simpleCommand
 import taboolib.common.platform.function.getDataFolder
 import taboolib.common.platform.function.info
@@ -68,7 +69,7 @@ object File {
     fun createOpenMenuCmd(){
         menuFiles.forEach { (yname,config) ->
             config.getStringList("bind.commands").forEach{ cmd ->
-                simpleCommand(cmd) { sender, _ ->
+                simpleCommand(cmd, permissionDefault = PermissionDefault.FALSE) { sender, _ ->
                     val player = Bukkit.getPlayer(sender.name)
                     player?.let { openMenu(it,yname) }
                 }

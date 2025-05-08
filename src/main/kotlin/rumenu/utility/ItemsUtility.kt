@@ -29,7 +29,7 @@ object ItemsUtility {
         val newmap = parseStringToMap(map,player)
         val str = newmap["itembase"]
         if (str != null) {
-            return createMenuItem(getIntroducedItem(str.toString()), newmap)
+            return createMenuItem(getIntroducedItem(str.toString())?: buildItem(Material.STONE), newmap)
         }
         return buildItem(material){
             applyMapToBuilder(this,newmap)

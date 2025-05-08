@@ -15,7 +15,6 @@ object RuMenu : Plugin() {
         variableTable = VariableTable
         variableCache = VariableCache()
         turntableFile()
-        info("此出为你留名")
     }
 
 }
