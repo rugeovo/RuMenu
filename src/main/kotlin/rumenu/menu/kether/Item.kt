@@ -1,13 +1,16 @@
 package rumenu.menu.kether
 
 import org.bukkit.Bukkit
+import org.bukkit.Color
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
+import org.bukkit.inventory.meta.LeatherArmorMeta
 import rumenu.cahe.OpenMenuCache.openCacheMenu
 import rumenu.profile.File.menuFiles
 import rumenu.utility.ItemsUtility.createMenuItem
+import taboolib.common.platform.function.info
 import taboolib.module.kether.KetherParser
 import taboolib.module.kether.combinationParser
 import taboolib.module.kether.player
@@ -116,6 +119,34 @@ object Item {
         it.group(type<ItemMeta>(),type<Int>()).apply(it) { item,num ->
             now {
                 item?.setCustomModelData(num)
+            }
+        }
+    }
+
+    @KetherParser(["set-meta-color"], shared = false)
+    fun setItemColor() = combinationParser {
+        it.group(type<ItemMeta>(),type<String>()).apply(it) { item,color ->
+            now {
+                item as LeatherArmorMeta
+                if (color.startsWith("#") && color.length == 7) {
+                    // 从第1位到第6位提取颜色值
+                    val r = color.substring(1, 3).toInt(16) // 红色通道
+                    val g = color.substring(3, 5).toInt(16) // 绿色通道
+                    val b = color.substring(5, 7).toInt(16) // 蓝色通道
+                    item.setColor(Color.fromRGB(r, g, b))
+                    info("aaa")
+                } else {
+                    throw IllegalArgumentException("Invalid hex color format. Expected format: #RRGGBB")
+                }
+            }
+        }
+    }
+
+    @KetherParser(["clear-meta-cmd"], shared = false)
+    fun clearItemCustomModelData() = combinationParser {
+        it.group(type<ItemMeta>()).apply(it) { item ->
+            now {
+                item?.setCustomModelData(null)
             }
         }
     }

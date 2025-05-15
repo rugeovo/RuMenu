@@ -68,8 +68,14 @@ object File {
 
     fun createOpenMenuCmd(){
         menuFiles.forEach { (yname,config) ->
+            val permission = config.getString("bind.permission") ?: "rumenu.bind.commands"
+            val default = config.getBoolean("bind.default")
+            var perdef = PermissionDefault.TRUE
+            if (!default) {
+                perdef = PermissionDefault.FALSE
+            }
             config.getStringList("bind.commands").forEach{ cmd ->
-                simpleCommand(cmd, permissionDefault = PermissionDefault.FALSE) { sender, _ ->
+                simpleCommand(cmd, permission = permission,permissionDefault = perdef) { sender, _ ->
                     val player = Bukkit.getPlayer(sender.name)
                     player?.let { openMenu(it,yname) }
                 }
